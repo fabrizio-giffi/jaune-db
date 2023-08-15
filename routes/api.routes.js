@@ -7,6 +7,12 @@ router.get("/", (req, res) => {
   res.json("All good in here");
 });
 
+router.get("/art/:technique", async (req, res) => {
+  const { technique } = req.params;
+  const response = await Art.find({ technique });
+  res.status(200).json(response);
+});
+
 router.post("/create", async (req, res) => {
   try {
     const newItem = await Art.create(req.body);
