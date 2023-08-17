@@ -13,6 +13,25 @@ router.get("/art/:technique", async (req, res) => {
   res.status(200).json(response);
 });
 
+router.get("/art/item/:id", async (req, res) => {
+  const { id } = req.params;
+  const response = await Art.findById(id);
+  res.status(200).json(response);
+});
+
+router.get("/art/item/:id", async (req, res) => {
+  const { id } = req.params;
+  const response = await Art.findById(id);
+  res.status(200).json(response);
+});
+
+router.patch("/art/item/:id", async (req, res) => {
+  const { id } = req.params;
+  const editedItem = await Art.findByIdAndUpdate(id, req.body, { new: true });
+  const response = { data: editedItem, message: "The item has been succesfully edited" };
+  res.status(200).json(response);
+});
+
 router.post("/create", async (req, res) => {
   try {
     const newItem = await Art.create(req.body);
