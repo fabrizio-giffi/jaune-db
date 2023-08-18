@@ -7,39 +7,60 @@ router.get("/", (req, res) => {
   res.json("All good in here");
 });
 
-router.get("/art/:technique", async (req, res) => {
+router.get("/art/item/:id", async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const response = await Art.findById(id);
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/art/:technique", async (req, res, next) => {
   const { technique } = req.params;
-  const response = await Art.find({ technique });
-  res.status(200).json(response);
+  try {
+    const response = await Art.find({ technique });
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get("/art/item/:id", async (req, res) => {
+router.delete("/art/item/:id", async (req, res, next) => {
   const { id } = req.params;
-  const response = await Art.findById(id);
-  res.status(200).json(response);
+  try {
+    const response = await Art.deleteOne({ id });
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get("/art/item/:id", async (req, res) => {
+router.patch("/art/item/:id", async (req, res, next) => {
   const { id } = req.params;
-  const response = await Art.findById(id);
-  res.status(200).json(response);
+  try {
+    const editedItem = await Art.findByIdAndUpdate(id, req.body, { new: true });
+    const response = { data: editedItem, message: "The item has been succesfully edited" };
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.patch("/art/item/:id", async (req, res) => {
-  const { id } = req.params;
-  const editedItem = await Art.findByIdAndUpdate(id, req.body, { new: true });
-  const response = { data: editedItem, message: "The item has been succesfully edited" };
-  res.status(200).json(response);
-});
-
-router.post("/create", async (req, res) => {
+router.post("/create", async (req, res, next) => {
   try {
     const newItem = await Art.create(req.body);
     const response = { data: newItem, message: "A new entry has been added to the DB" };
     res.status(201).json(response);
-  } catch (error) {
-    res.status(400).json({ message: "Something went wrong" });
+  } catch (err) {
+    next(err);
   }
 });
 
 module.exports = router;
+
+// res.status(400).json({ message: "Something went wrong when trying to create a new entry in the DB" });
+// res.status(400).json({ message: "Couldn't edit the item with id " + id });
+// res.status(400).json({ message: "Couldn't delete the item with id " + id });
+// res.status(400).json({ message: "Couldn't find the item with id " + id });
