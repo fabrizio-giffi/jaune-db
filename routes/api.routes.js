@@ -30,7 +30,7 @@ router.get("/art/:technique", async (req, res, next) => {
 router.delete("/art/item/:id", async (req, res, next) => {
   const { id } = req.params;
   try {
-    const response = await Art.deleteOne({ id });
+    const response = await Art.deleteOne({ _id: id });
     res.status(200).json(response);
   } catch (err) {
     next(err);
