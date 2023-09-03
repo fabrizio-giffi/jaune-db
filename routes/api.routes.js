@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const Art = require("../models/Art.model");
 
+const fileUploader = require("../config/cloudinary");
+
 // all domain/api/* routes
 
 router.get("/", (req, res) => {
@@ -56,6 +58,14 @@ router.post("/create", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+router.post("/upload", fileUploader.single("url"), (req, res, next) => {
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  res.json({ fileUrl: req.file.path });
 });
 
 module.exports = router;

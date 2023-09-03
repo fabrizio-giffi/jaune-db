@@ -18,7 +18,7 @@ const artSchema = new Schema(
     },
     technique: {
       type: String,
-      enum: ["acryl leinwand", "bleistift", "federzeichnung mit tinte", "acryl holz", "buntstift"],
+      enum: ["acryl-leinwand", "bleistift", "federzeichnung-mit-tinte", "acryl-holz", "buntstift"],
       required: true,
     },
     size: {
